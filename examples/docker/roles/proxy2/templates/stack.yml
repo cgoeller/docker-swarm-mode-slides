@@ -1,0 +1,25 @@
+---
+# {{ ansible_managed }}
+version: '3.5'
+
+networks:
+    proxy:
+      external: true
+      name: net_proxy # the external name
+
+configs:
+  nginx_config:
+    file: /tmp/nginx.conf
+
+services:
+  proxy:
+    image: nginx:latest
+    ports:
+      - "90:80"
+    deploy:
+      mode: global
+    configs:
+      - source: nginx_config
+        target: /etc/nginx/conf.d/default.conf
+    networks:
+      - proxy

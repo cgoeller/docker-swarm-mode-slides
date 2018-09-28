@@ -1,0 +1,13 @@
+---
+# Additional env vars to set on specific containers
+docker_container_env_vars:
+  # general
+  DOCKER_SERVICE_ID: !unsafe "{{.Service.ID}}"
+  DOCKER_SERVICE_NAME: !unsafe "{{.Service.Name}}"
+  DOCKER_NODE_ID: !unsafe "{{.Node.ID}}"
+  DOCKER_TASK_ID: !unsafe "{{.Task.ID}}"
+  DOCKER_TASK_NAME: !unsafe "{{.Task.Name}}"
+  DOCKER_TASK_SLOT: !unsafe "{{.Task.Slot}}"
+  # special for ES docker image
+  SERVICE_NAME: !unsafe "{{.Service.Name}}"
+  node.name: !unsafe "{{.Task.Name}}"

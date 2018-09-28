@@ -1,0 +1,11 @@
+---
+# ipvsadm and cluster-network-kmp-default is needed for docker swarm mode (kernel modules vs_ip and vs_ip_rr)
+- name: Install Docker daemon
+  become: true
+  zypper:
+    name: "{{ item }}"
+    state: present
+  with_items:
+    - docker-engine
+    - ipvsadm 
+    - cluster-network-kmp-default

@@ -1,0 +1,7 @@
+---
+- name: Say hello
+  hosts: all
+  tasks:
+    - name: Print info
+      debug:
+        msg: "Hello World on {{ ansible_hostname }} from Ansible {{ ansible_version.full }}. Inventory: {{ inventory_file }}"

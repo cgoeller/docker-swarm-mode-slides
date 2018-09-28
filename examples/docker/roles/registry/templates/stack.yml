@@ -1,0 +1,21 @@
+---
+# {{ ansible_managed }}
+version: '3.5'
+
+volumes:
+  data: {}
+  
+services:
+  registry:
+    image: registry:2
+    ports:
+      - "5000:5000"
+    deploy:
+      mode: replicated
+      replicas: 1
+      placement:
+        constraints:
+          - node.hostname == docker-1
+    volumes:
+      - data:/var/lib/registry
+    restart: always

@@ -1,2 +1,59 @@
 # docker-swarm-mode-slides
+
 Introduction to Docker Swarm Mode
+
+Hosted online at: https://cgoeller.github.io/docker-swarm-mode-slides
+
+To create a PDF printout:
+
+1. Open https://cgoeller.github.io/docker-swarm-mode-slides?print-pdf in Chrome
+1. Open the in-browser print dialog (CTRL/CMD+P).
+1. Change the Destination setting to Save as PDF.
+1. Change the Layout to Landscape.
+1. Change the Margins to None.
+1. Enable the Background graphics option.
+1. Click save.
+
+The presentation was created using [reveal.js](http://lab.hakim.se/reveal-js)
+
+## Topics
+
+* a tool for what ? 
+* difference to plain docker
+* facts: version, release cycle, license
+* similar products - kubernetes, mesos, rancher
+* legacy docker swarm
+* needed knowledge
+* features
+  * service
+  * task
+  * routing mesh
+  * overlay networks
+  * service discovery - dns names
+  * stacks
+  * secrets
+  * configs
+  * docker compose file
+* under the hood - raft protocol / consensus 
+* how to setup
+  * list of commands
+  * docker node
+  * docker stack deploy / ls
+  * docker service ls / ps
+* pros
+  * scaling
+* cons
+  * persistence story
+  * host pinning
+  * stability / bugs
+* example
+  * ansible / vagrant generated swarm (3 nodes - already built)
+* tools
+  * portainer
+  * traefik
+  * commercial docker enterprise
+* advice
+  * number of master / slave nodes
+  * do and don't
+* links
+   * https://docs.docker.com/engine/swarm/

@@ -1,0 +1,18 @@
+---
+- name: Create overlay network 'proxy'
+  become: true
+  docker_network:
+    name: net_proxy
+    driver: overlay
+    driver_options:
+      encrypted: "true"
+
+- name: Create compose file
+  become: true
+  template:
+    src: stack.yml
+    dest: /tmp/stack.yml
+
+- name: Deploy stack
+  become: true
+  command: docker stack deploy --prune --with-registry-auth --compose-file /tmp/stack.yml proxy

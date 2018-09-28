@@ -1,0 +1,21 @@
+---
+- name: Clean build folder
+  file: path=/tmp/image state=absent
+
+- name: Crate build folder
+  file: path=/tmp/image state=directory
+
+- name: Copy sources
+  template:
+    src: "{{ item }}"
+    dest: /tmp/image/
+  with_items:
+    - Dockerfile
+    - es-docker
+
+- name: Build ES image and push it to the private registry
+  docker_image:
+    path: /tmp/image/
+    name: localhost:5000/elasticsearch
+    force: yes
+    push: yes

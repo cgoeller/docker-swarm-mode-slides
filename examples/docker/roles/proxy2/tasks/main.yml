@@ -1,0 +1,16 @@
+---
+- name: Create compose file
+  become: true
+  template:
+    src: stack.yml
+    dest: /tmp/stack.yml
+
+- name: Create config file
+  become: true
+  template:
+    src: nginx.conf
+    dest: /tmp/nginx.conf
+
+- name: Deploy stack
+  become: true
+  command: docker stack deploy --prune --with-registry-auth --compose-file /tmp/stack.yml proxy2

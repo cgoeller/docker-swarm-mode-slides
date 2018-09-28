@@ -1,0 +1,20 @@
+---
+- name: Reboot system (immediately) 
+  become: true
+  shell: sleep 1 && shutdown -r now "ansible triggered reboot"
+  async: 1
+  poll: 0
+  failed_when: false
+  when: do_reboot
+
+- name: Waiting for server to come back
+  become: false
+  local_action:
+    module: "wait_for"
+    host: "{{ inventory_hostname }}"
+    state: started
+    port: 22
+    delay: 30
+    connect_timeout: 15
+    timeout: 900
+  when: do_reboot

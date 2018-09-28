@@ -1,0 +1,10 @@
+---
+- name: Create compose file
+  become: true
+  template:
+    src: stack.yml
+    dest: /tmp/stack.yml
+
+- name: Deploy stack
+  become: true
+  command: docker stack deploy --prune --with-registry-auth --compose-file /tmp/stack.yml es

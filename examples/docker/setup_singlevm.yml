@@ -1,0 +1,7 @@
+---
+# Playbook to install docker engine
+
+- name: Install docker
+  hosts: singlevm
+  roles:
+    - docker-engine

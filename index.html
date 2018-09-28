@@ -1,0 +1,115 @@
+<!doctype html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="author" content="Christian Göller">
+
+    <title>Docker swarm mode</title>
+
+    <link rel="stylesheet" href="css/reveal.css">
+    <link rel="stylesheet" href="css/theme/moon.css">
+
+    <!-- Theme used for syntax highlighting of code -->
+    <link rel="stylesheet" href="lib/css/zenburn.css">
+
+    <!-- Printing and PDF exports -->
+    <script>
+        var link = document.createElement('link');
+        link.rel = 'stylesheet';
+        link.type = 'text/css';
+        link.href = window.location.search.match(/print-pdf/gi) ? 'css/print/pdf.css' : 'css/print/paper.css';
+        document.getElementsByTagName('head')[0].appendChild(link);
+    </script>
+</head>
+
+<body>
+    <div class="reveal">
+        <div class="slides">
+
+            <section>
+                <img src="img/innocon2018.svg" style="width: 50%;background: white; border-color: white; border-width: 40px">
+            </section>
+
+            <section>
+                <h1>Docker swarm mode</h1>
+            </section>
+
+            <section data-markdown>
+                <textarea data-template>
+					## ...
+					* ...
+				</textarea>
+            </section>
+
+            <section data-markdown>
+                <textarea data-template>
+					## ...
+					* ...
+				</textarea>
+            </section>
+
+            <section data-markdown>
+                <textarea data-template>
+					# The end.
+					</textarea>
+            </section>
+        </div>
+    </div>
+
+    <!-- Script loading library, needed to load plugins -->
+    <script src="lib/js/head.min.js"></script>
+    <script src="js/reveal.js"></script>
+
+    <script>
+        // More info about config & dependencies:
+        // - https://github.com/hakimel/reveal.js#configuration
+        // - https://github.com/hakimel/reveal.js#dependencies
+        Reveal.initialize({
+            // Display the page number of the current slide
+            slideNumber: true,
+            showSlideNumber: 'speaker',
+
+            // Push each slide change to the browser history
+            history: true,
+
+            // Transition style
+            transition: 'convex', // none/fade/slide/convex/concave/zoom
+
+            dependencies: [
+                // Cross-browser shim that fully implements classList - https://github.com/eligrey/classList.js/
+                {
+                    src: 'lib/js/classList.js',
+                    condition: function() {
+                        return !document.body.classList;
+                    }
+                },
+
+                // Interpret Markdown in <section> elements
+                {
+                    src: 'plugin/markdown/marked.js'
+                }, {
+                    src: 'plugin/markdown/markdown.js'
+                },
+
+                // Speaker notes
+                {
+                    src: 'plugin/notes/notes.js',
+                    async: true
+                },
+
+                // Syntax highlight for <code> elements
+                {
+                    src: 'plugin/highlight/highlight.js',
+                    async: true,
+                    callback: function() {
+                        hljs.initHighlightingOnLoad();
+                    }
+                }
+            ]
+        });
+    </script>
+</body>
+
+</html>

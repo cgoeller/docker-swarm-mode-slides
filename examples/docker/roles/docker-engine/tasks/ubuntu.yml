@@ -1,0 +1,25 @@
+---
+- name: Add docker repo key
+  become: true
+  apt_key: 
+    url: "{{ docker_ubuntu_apt_key }}"
+    state: present
+
+- name: Configure docker repo
+  become: true
+  apt_repository: 
+    repo: "{{ docker_ubuntu_repo }}"
+    state: present
+    update_cache: yes
+
+- name: Install Docker daemon
+  become: true
+  apt:
+    name: "{{ item }}"
+    state: present
+  with_items:
+    - "{{ docker_ubuntu_package_name }}"
+    - apt-transport-https
+    - ca-certificates
+    - software-properties-common
+    - bash-completion

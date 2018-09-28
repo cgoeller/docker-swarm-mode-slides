@@ -1,0 +1,33 @@
+---
+- name: Install docker
+  hosts: docker-swarm
+  roles:
+    - docker-engine
+
+- name: Additional setup for docker
+  hosts: docker-swarm
+  become: true
+  tasks:
+    - name: Install docker-py
+      pip:
+        name: docker-py
+    - name: Fix /etc/hosts
+      lineinfile:
+        path: /etc/hosts
+        regexp: '^::1'
+        state: absent
+    # https://www.elastic.co/guide/en/elasticsearch/reference/master/vm-max-map-count.html --> 262144
+    - name: Increase maximum map count
+      become: true
+      sysctl:
+        name: vm.max_map_count
+        value: 262144
+
+- import_playbook: docker-swarm.yml
+
+- name: Deploy stacks
+  hosts: manager[0]
+  roles:
+    - registry
+    - portainer
+    - proxy

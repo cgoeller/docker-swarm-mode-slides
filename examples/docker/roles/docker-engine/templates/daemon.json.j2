@@ -1,0 +1,40 @@
+{
+    "bip": "{{ docker_bridge_ip }}",
+    "storage-driver": "{{ docker_storage_driver }}",
+{% if docker_storage_driver == "devicemapper" %}
+    "storage-opts": [
+        "dm.directlvm_device={{ docker_dm_directlvm_device }}",
+        "dm.thinp_percent=95",
+        "dm.thinp_metapercent=1",
+        "dm.thinp_autoextend_threshold=80",
+        "dm.thinp_autoextend_percent=20",
+        "dm.directlvm_device_force=false",
+        "dm.min_free_space=10%",
+        "dm.use_deferred_removal=true",
+        "dm.use_deferred_deletion=true",
+        "dm.mountopt=discard",
+{% if docker_debug %}
+        "dm.libdm_log_level=7",
+{% endif %}
+        "dm.fs={{ docker_dm_fs }}"
+    ],
+{% endif %}
+{% if docker_insecure_registries | length > 0 %}
+    "insecure-registries": {{ docker_insecure_registries | tojson }},
+{% endif %}
+{% if docker_experimental %}
+    "metrics-addr" : "{{ docker_metrics_address }}",
+    "experimental" : true,
+{% endif %}
+{% if docker_debug %}
+    "debug": true,
+    "log-level": "debug",
+{% else %}
+    "log-level": "{{ docker_log_level }}",
+{% endif %}
+    "log-driver": "json-file",
+    "log-opts": {
+        "max-size": "{{ docker_logs_max_size }}",
+        "max-file": "{{ docker_logs_max_file }}"
+    }
+}

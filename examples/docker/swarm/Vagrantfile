@@ -1,0 +1,101 @@
+# -*- mode: ruby -*-
+# vi: set ft=ruby :
+
+Vagrant.require_version(">=1.9")
+
+Vagrant.configure("2") do |config|
+  # For a complete reference, please see the online documentation at
+  # https://docs.vagrantup.com.
+
+  config.vm.box = "minimal/xenial64"
+
+  # Sync parent folder
+  config.vm.synced_folder "..", "/vagrant", type: "virtualbox"
+  
+  # Do not update virtual box guest additions
+  if Vagrant.has_plugin?("vagrant-vbguest")
+    config.vbguest.auto_update = false
+  end
+
+  # Configure virtual hardware
+  config.vm.provider "virtualbox" do |vb|
+    # Display the VirtualBox GUI when booting the machine
+    vb.gui = false
+    # Customize the amount of memory on the VM
+    vb.memory = "2048"
+    # Customize CPUs
+    vb.cpus = 1
+    # Enable linked clones
+    vb.linked_clone = true
+    # Enable host's resolver as a DNS proxy in NAT mode
+    vb.customize ["modifyvm", :id, "--natdnshostresolver1", "on"]
+  end
+
+  (1..3).each do |i|
+    config.vm.define "docker-#{i}" do |node|
+
+      # Node settings
+      node.vm.hostname = "docker-#{i}"
+      node.vm.network "private_network", ip: "192.168.56.1#{i}"
+      
+      # VirtualBox settings
+      node.vm.provider "virtualbox" do |vb|
+        vb.name = "docker-#{i}"
+      end
+
+      # Provisioning for all
+      node.vm.provision "basics", type: "shell", privileged: true, inline: <<-SHELL
+        export DEBIAN_FRONTEND=noninteractive   
+        apt-get update
+        apt-get install -y sshpass python-pip
+      SHELL
+    end
+  end
+
+  config.vm.define "controller", primary: true  do |node|
+    # Node settings
+    node.vm.hostname = "controller"
+    node.vm.network "private_network", ip: "192.168.56.10"
+    
+    # VirtualBox settings
+    node.vm.provider "virtualbox" do |vb|
+      vb.name = "controller"
+      vb.memory = "1024"
+    end
+
+    node.vm.provision "install_ansible", type: "shell", privileged: true, inline: <<-SHELL
+      export DEBIAN_FRONTEND=noninteractive   
+      apt-get update
+      apt-get install -y sshpass python-pip
+      pip install --upgrade pyvmomi ansible==2.4.2.0
+    SHELL
+  
+    node.vm.provision "test_ansible", type: "ansible_local" do |ansible|
+      ansible.install = false
+      ansible.verbose = true
+      ansible.compatibility_mode = "2.0"
+      ansible.playbook = "helloworld.yml"
+      ansible.limit = "all"
+      ansible.inventory_path = "inventories/multi.ini"
+    end
+  
+    node.vm.provision "setup_docker", type: "ansible_local" do |ansible|
+      ansible.install = false
+      ansible.verbose = false
+      ansible.compatibility_mode = "2.0"
+      ansible.playbook = "setup_multivm.yml"
+      ansible.limit = "docker-swarm"
+      ansible.inventory_path = "inventories/multi.ini"
+    end
+	
+	node.vm.provision "setup_es", run: "never", type: "ansible_local" do |ansible|
+      ansible.install = false
+      ansible.verbose = false
+      ansible.compatibility_mode = "2.0"
+      ansible.playbook = "es_cluster.yml"
+      ansible.limit = "docker-swarm"
+      ansible.inventory_path = "inventories/multi.ini"
+    end
+  end
+   
+end

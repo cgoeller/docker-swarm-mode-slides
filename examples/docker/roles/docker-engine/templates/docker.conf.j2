@@ -1,0 +1,12 @@
+[Service]
+ExecStart=
+ExecStart=/usr/bin/dockerd --config-file /etc/docker/daemon.json
+{% if ansible_distribution == "RedHat" %}
+MountFlags=slave
+{% endif %}
+{% if ansible_distribution != "RedHat" %}
+TasksMax=infinity
+{% endif %}
+{% if docker_http_proxy is defined %}
+Environment="HTTP_PROXY={{ docker_http_proxy }}"
+{% endif %}

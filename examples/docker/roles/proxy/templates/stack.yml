@@ -1,0 +1,27 @@
+---
+# {{ ansible_managed }}
+version: '3.5'
+
+networks:
+    proxy:
+      external: true
+      name: net_proxy # the external name
+
+services:
+  proxy:
+    image: traefik:latest
+    command: --docker --docker.swarmmode --docker.domain=test.local --docker.watch --web
+    ports:
+      - "80:80"
+      - "443:443"
+      - "8080:8080"
+    deploy:
+      mode: replicated
+      replicas: {{ groups['manager'] | length }}
+      placement:
+        constraints:
+          - node.role == manager
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+    networks:
+      - proxy

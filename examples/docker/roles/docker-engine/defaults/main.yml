@@ -1,0 +1,30 @@
+---
+docker_bridge_ip: 172.16.123.1/24
+docker_group_add_user: true
+docker_logs_max_size: 10m
+docker_logs_max_file: 7
+docker_metrics_port: 11080
+docker_metrics_address: "0.0.0.0:{{ docker_metrics_port }}"
+docker_experimental: false
+docker_debug: false
+# debug, info, warn, error, fatal
+docker_log_level: info
+
+# HTTP Proxy (optional)
+# docker_http_proxy: http://proxy.example.com:80/
+
+# Insecure registries
+docker_insecure_registries: []
+
+# Storage driver
+docker_storage_driver: overlay2
+docker_dm_directlvm_device: /dev/sdc
+docker_dm_fs: xfs
+
+# Ubuntu
+docker_ubuntu_apt_key: https://download.docker.com/linux/ubuntu/gpg
+docker_ubuntu_repo: "deb [arch=amd64] https://download.docker.com/linux/ubuntu {{ ansible_distribution_release }} stable"
+docker_ubuntu_package_name: docker-ce
+
+# RHEL
+docker_rhel_package_name: docker-ce

@@ -1,0 +1,70 @@
+---
+- name: Create systemd conf directory
+  become: true
+  file: 
+    path: /etc/systemd/system/docker.service.d 
+    state: directory
+
+- name: Create docker.conf
+  become: true
+  template:
+    src: docker.conf.j2
+    dest: /etc/systemd/system/docker.service.d/docker.conf
+
+- name: Create etc conf directory
+  become: true
+  file: 
+    path: /etc/docker
+    state: directory
+
+- name: Create daemon configuration file
+  become: true
+  template:
+    src: daemon.json.j2
+    dest: /etc/docker/daemon.json
+
+- name: Include os specific tasks
+  include_tasks: "{{ ansible_distribution | lower }}.yml"
+
+- name: Start docker daemon
+  become: true
+  systemd:
+    name: docker
+    daemon_reload: yes
+    enabled: yes
+    state: started
+
+- name: Enable net.bridge.bridge-nf-call-ip6tables
+  become: true
+  sysctl:
+    name: net.bridge.bridge-nf-call-ip6tables
+    value: 1
+  when: ansible_distribution == "RedHat"
+
+- name: Enable net.bridge.bridge-nf-call-iptables
+  become: true
+  sysctl:
+    name: net.bridge.bridge-nf-call-iptables
+    value: 1
+  when: ansible_distribution == "RedHat"
+
+- name: Create group docker
+  become: true 
+  group:
+    name: docker
+    state: present
+  
+- name: Add current user to group docker
+  become: true 
+  user:
+    name: "{{ ansible_user }}"
+    groups: docker
+    append: yes
+  register: user_add_result
+  when: docker_group_add_user
+
+# Do not reboot immediately, but after installation of the docker engine
+- name: Do reboot later
+  set_fact:
+    do_reboot: true
+  when: user_add_result|changed
