@@ -38,21 +38,264 @@
 
             <section data-markdown>
                 <textarea data-template>
-					## ...
-					* ...
+					## What ?
+					* Container orchestration
+					* easy to setup
+					* integrated in the docker engine
+					* declarative service model
 				</textarea>
             </section>
 
             <section data-markdown>
                 <textarea data-template>
-					## ...
-					* ...
+					## Facts
+					* Available since docker 1.12.0 (07/28/2016)
+					* Usable since 17.03.0-ce (01/03/2017)
+					* runs on Linux and Windows
+					* 7 month maintenance lifecycle
+					* Editions
+					  * CE - Community edition (free)
+					  * EE = Enterprise edition ($75 per node per month)
 				</textarea>
+            </section>
+
+            <section data-markdown>
+                <textarea data-template>
+					## History
+					* Before Docker 1.12
+					* (legacy) Docker Swarm
+					* much more complicated to setup
+				</textarea>
+            </section>
+
+            <section data-markdown>
+                <textarea data-template>
+					## Competitive products
+					* Kubernetes
+					* Mesosphere
+					* (Rancher 1.6 Cattle)
+				</textarea>
+            </section>
+
+            <section data-markdown>
+                <textarea data-template>
+					## What you need
+					* 1 docker node for dev / demo
+					* at least 3 nodes for a productive cluster
+					* docker registry
+					* general knowledge about docker
+				</textarea>
+            </section>
+
+            <section>
+                <section data-markdown>
+                    <textarea data-template>
+					## Key elements
+					* node
+					* service
+					* task
+					* stack
+				</textarea>
+                </section>
+
+                <section data-markdown>
+                    <textarea data-template>
+					## Node
+					* A node is a computer (VM, physical) with the docker engine
+					* Can be a manager or a worker
+					* Manager nodes also run container workload
+					* At least one manager in the swarm, exactly one manger is leader
+					* Raft Consensus Algorithm is used for consistency of cluster state
+					* Traffic between nodes is TLS encrypted
+				</textarea>
+                </section>
+
+                <section data-markdown>
+                    <textarea data-template>
+					## Service 1
+					* the desired state is described
+					   * docker image
+					   * mounts
+					   * env vars
+					   * limits & reservations (RAM, CPU) ...
+					* Scheduling mode
+					  * global: On each node exactly one container is started
+					  * replicated: Container is started specified number of times
+				</textarea>
+                </section>
+
+                <section data-markdown>
+                    <textarea data-template>
+						## Service 2
+						* Healthcheck
+						  * Command to execute to determine health
+						  * Unhealthy: the container will be stopped, not reachable over network
+						* Rolling update
+						  * Update of containers ony by one
+						  * Configurable behaviour on failure
+						  * Makes zero-downtime deployment possible
+						* Different life-cycle
+						  * Container will be restarted automatically when stopped manually!
+					</textarea>
+                </section>
+
+                <section data-markdown>
+                    <textarea data-template>
+					## Task
+					* task for a single node to execute a single container
+					* "atomic scheduling unit of swarm"
+					</textarea>
+                </section>
+
+                <section data-markdown>
+                    <textarea data-template>
+					## Stack
+					* Definition of things that form an application stack
+					  * services
+					  * networks
+					  * volumes
+					* Defined in a compose file (yaml)
+					* e. g. database + webserver
+				</textarea>
+                </section>
+
+                <section data-markdown>
+                    <textarea data-template>
+						## Compose file example
+						
+						TODO
+						
+					</textarea>
+                </section>
+            </section>
+
+            <section>
+                <section data-markdown>
+                    <textarea data-template>
+					## Networking features
+					* Overlay networks
+					* Load balancing / routing mesh
+					* Service discovery
+				</textarea>
+                </section>
+
+                <section data-markdown>
+                    <textarea data-template>
+					## Overlay networks
+					* TODO
+					</textarea>
+                </section>
+
+                <section data-markdown>
+                    <textarea data-template>
+					## Load balancing
+					* TODO image
+					* endpoint mode VIP / DNS_RR
+					</textarea>
+                </section>
+
+                <section data-markdown>
+                    <textarea data-template>
+					## Service discovery
+					* TODO
+					* task.$servicename
+					</textarea>
+                </section>
+            </section>
+
+            <section data-markdown>
+                <textarea data-template>
+				## More features
+				* Secrets and Configs
+				  * Similar to env var, but larger (<= 500 kB)
+				  * can be definied in the compose file (or via CLI)
+				  * mounted as file in docker container
+				  * secrets are encrypted on rest - unencrypted in RAM disk
+				  * read-only
+				  * immutable - complicated to update &#128546;
+			</textarea>
+            </section>
+
+            <section data-markdown>
+                <textarea data-template>
+				## How to setup
+
+				```bash
+				# on first manager node
+				docker swarm init --advertise-addr <MANAGER-IP>
+				
+				# Show join commands for managers / workers
+				docker swarm join-token manager
+				docker swarm join-token worker
+
+				# Issue command on other nodes. Example
+				docker swarm join \
+				  --token SWMTKN-1-49nj1cmql0jk... \
+				  192.168.0.5:2377
+
+				# List infos
+				docker node ls
+				docker node inspect <NODE>
+				```			
+			</textarea>
+            </section>
+
+            <section data-markdown>
+                <textarea data-template>
+				## Contra &#128078;
+				* Missing persistence story
+				  * a container of a service maybe started on different host after reboot or service update
+				  * the containers volumes will not migrate &#128546;
+				  * workarounds: 
+					* network storage (NFS)
+					* host pinning by using placement constraints
+				* stability / bugs in docker engine
+			</textarea>
+            </section>
+
+            <section data-markdown>
+                <textarea data-template>
+				## Advice &#9757;
+				* Sizing of manager nodes
+				  * a quorum is needed to be operable
+				  * odd number of manager nodes
+				  * at least 3 nodes for fault tolerance of 1
+				  * maybe manager-only nodes
+				* Do not use it for stateful services
+				* Do not use it for databases
+				* Beware of docker engine upgrades
+				* Be careful with the healthchecks
+			</textarea>
+            </section>
+
+            <section data-markdown>
+                <textarea data-template>
+				## Tools with swarm mode support
+				* Portainer: Web UI for Docker cluster
+				* Traefik: Reverse proxy
+			</textarea>
+            </section>
+
+            <section data-markdown>
+                <textarea data-template>
+				## Example
+				* 3 node setup with vagrant / vbox
+				* portainer
+				* traefik
+				* nginx
+
+				TODO
+				
+				https://github.com/cgoeller/docker-swarm-mode-slides/examples
+			</textarea>
             </section>
 
             <section data-markdown>
                 <textarea data-template>
 					# The end.
+
+					https://docs.docker.com/engine/swarm
+					https://github.com/cgoeller/docker-swarm-mode-slides
 					</textarea>
             </section>
         </div>

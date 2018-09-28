@@ -21,33 +21,36 @@ The presentation was created using [reveal.js](http://lab.hakim.se/reveal-js)
 * a tool for what ? 
 * difference to plain docker
 * facts: version, release cycle, license
-* similar products - kubernetes, mesos, rancher
 * legacy docker swarm
-* needed knowledge
+* similar products - kubernetes, mesos, rancher
+* needed knowledge / infrastructure / stuff
 * features
+  * nodes
   * service
   * task
   * routing mesh
+  * load balancing
   * overlay networks
   * service discovery - dns names
   * stacks
   * secrets
   * configs
   * docker compose file
-* under the hood - raft protocol / consensus 
+  * healthchecks
+  * rolling updates
+  * scaling
+* under the hood - raft protocol / consensus
 * how to setup
-  * list of commands
+  * docker swarm
   * docker node
   * docker stack deploy / ls
   * docker service ls / ps
-* pros
-  * scaling
 * cons
   * persistence story
   * host pinning
   * stability / bugs
 * example
-  * ansible / vagrant generated swarm (3 nodes - already built)
+  * ansible / vagrant generated swarm
 * tools
   * portainer
   * traefik
