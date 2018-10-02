@@ -1,19 +1,8 @@
 # Docker example
 
-This example contains two vagrant environments, which can be found in the folders:
+This example contains a vagrant environments, which can be found in the folders:
 
-* `singlevm`
 * `swarm`
-
-## Single VM
-
-Creates a VMm, installs the Docker engine using Ansible
-
-```bash
-vagrant up
-# Login
-vagrant ssh
-```
 
 ## Swarm
 
@@ -26,7 +15,7 @@ The docker swarm will be populated with the services: docker registry, portainer
 
 Registry: http://192.168.56.11:5000/v2/_catalog/
 Portainer: http://192.168.56.11:9000/
-Trafik: http://192.168.56.11:8080/
+Traefik: http://192.168.56.11:8080/
 
 ### Startup
 

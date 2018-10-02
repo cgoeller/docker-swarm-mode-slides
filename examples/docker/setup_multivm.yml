@@ -29,5 +29,5 @@
   hosts: manager[0]
   roles:
     - registry
-    - portainer
+    - portainer-swarm
     - proxy
