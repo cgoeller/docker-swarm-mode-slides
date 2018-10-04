@@ -120,7 +120,7 @@
 					   * limits & reservations (RAM, CPU) ...
 					* Scheduling mode
 					  * global: On each node exactly one container is started
-					  * replicated: Container is started specified number of times
+					  * replicated: Container is started specified number of times (can be scaled later)
 				</textarea>
                 </section>
 
@@ -156,6 +156,9 @@
 					  * volumes
 					* Defined in a compose file (yaml)
 					* e. g. database + webserver
+					```bash
+					docker stack deploy --compose-file <file.yml> <stackname>
+					```
 				</textarea>
                 </section>
 
@@ -163,8 +166,35 @@
                     <textarea data-template>
 						## Compose file example
 						
-						TODO
+						```yaml
+						version: '3.5'
+
+						services:
+						  agent:
+							image: portainer/agent:1.1.2
+							volumes:
+							  - /var/run/docker.sock:/var/run/docker.sock
+							networks:
+							  - agent_network
+							deploy:
+							  mode: global
 						
+						  portainer:
+							image: portainer/portainer:1.19.2
+							command: --no-auth -H tcp://tasks.agent:9001 --tlsskipverify
+							ports:
+							  - "9000:9000"
+							networks:
+							  - agent_network
+							deploy:
+							  mode: replicated
+							  replicas: 1
+						
+						networks:
+						  agent_network:
+							driver: overlay
+							attachable: true
+						```
 					</textarea>
                 </section>
             </section>
@@ -174,6 +204,7 @@
                     <textarea data-template>
 					## Networking features
 					* Overlay networks
+					* Port publishing
 					* Load balancing / routing mesh
 					* Service discovery
 				</textarea>
@@ -182,23 +213,38 @@
                 <section data-markdown>
                     <textarea data-template>
 					## Overlay networks
-					* TODO
+					* Distributed network among docker hosts
+					* on top of host network
+					* `ingress` network automatically created by docker
+					* Optionally encrypted (IPSEC, AES)
+					* Containers connected to same overlay net can communicate with each other
+					
+					```bash
+					docker network create --driver overlay --opt encrypted my-overlay-net
+					```
 					</textarea>
                 </section>
 
-                <section data-markdown>
+				<section data-markdown>
                     <textarea data-template>
-					## Load balancing
-					* TODO image
-					* endpoint mode VIP / DNS_RR
+					## Port publishing / Load balancing
+					* Service can publish ports (TCP / UDP)
+					* Traffic to that port is load-balanced to replicas (VIP)
+					* https://docs.docker.com/engine/swarm/images/ingress-routing-mesh.png
 					</textarea>
                 </section>
 
                 <section data-markdown>
                     <textarea data-template>
 					## Service discovery
-					* TODO
-					* task.$servicename
+					* Based on DNS requests
+					* Only possible in docker containers
+					* Docker-internal DNS service
+					* Resolvable names:
+					  * servicename --> VIP
+					  * stackname_servicename --> VIP
+					  * tasks.servicename --> IPs of replicas (DNS_RR)
+					* Endpoint mode configurable: DNS_RR or VIP
 					</textarea>
                 </section>
             </section>
@@ -279,13 +325,10 @@
             <section data-markdown>
                 <textarea data-template>
 				## Example
-				* 3 node setup with vagrant / vbox
+				* 3 node setup with vagrant / ansible
 				* portainer
 				* traefik
-				* nginx
 
-				TODO
-				
 				https://github.com/cgoeller/docker-swarm-mode-slides/examples
 			</textarea>
             </section>
