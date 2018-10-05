@@ -9,9 +9,6 @@ Vagrant.configure("2") do |config|
 
   config.vm.box = "minimal/xenial64"
 
-  # Sync parent folder
-  #config.vm.synced_folder "..", "/vagrant", type: "virtualbox"
-  
   # Do not update virtual box guest additions
   if Vagrant.has_plugin?("vagrant-vbguest")
     config.vbguest.auto_update = false
@@ -64,7 +61,7 @@ Vagrant.configure("2") do |config|
     end
 
     node.vm.provision "install_ansible", type: "shell", privileged: true, inline: <<-SHELL
-      export DEBIAN_FRONTEND=noninteractive   
+      export DEBIAN_FRONTEND=noninteractive
       apt-get update
       apt-get install -y sshpass python-pip
       pip install --upgrade pyvmomi ansible==2.4.2.0
@@ -88,7 +85,7 @@ Vagrant.configure("2") do |config|
       ansible.inventory_path = "inventories/multi.ini"
     end
 	
-	node.vm.provision "setup_es", run: "never", type: "ansible_local" do |ansible|
+	  node.vm.provision "setup_es", run: "never", type: "ansible_local" do |ansible|
       ansible.install = false
       ansible.verbose = false
       ansible.compatibility_mode = "2.0"
