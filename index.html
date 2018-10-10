@@ -9,7 +9,7 @@
     <title>Docker swarm mode</title>
 
     <link rel="stylesheet" href="css/reveal.css">
-    <link rel="stylesheet" href="css/theme/moon.css">
+    <link rel="stylesheet" href="css/theme/sky.css">
 
     <!-- Theme used for syntax highlighting of code -->
     <link rel="stylesheet" href="lib/css/zenburn.css">
@@ -29,11 +29,12 @@
         <div class="slides">
 
             <section>
-                <img src="img/innocon2018.svg" style="width: 50%;background: white; border-color: white; border-width: 40px">
+                <img src="img/innocon2018.svg" style="width: 50%;background: white; border-color: white; border-width: 40px" />
             </section>
 
             <section>
-                <h1>Docker swarm mode</h1>
+                <h2>Docker swarm mode</h2>
+                <img src="https://www.docker.com/sites/default/files/mono-horizontal.png" style="border:none; box-shadow: none" />
             </section>
 
             <section data-markdown>
@@ -43,6 +44,14 @@
 					* easy to setup
 					* integrated in the docker engine
 					* declarative service model
+				</textarea>
+            </section>
+
+            <section data-markdown>
+                <textarea data-template>
+					## Why ?
+					* hundreds of hosts
+					* thousands of containers
 				</textarea>
             </section>
 
@@ -80,7 +89,7 @@
             <section data-markdown>
                 <textarea data-template>
 					## What you need
-					* 1 docker node for dev / demo
+					* one docker node for dev / demo
 					* at least 3 nodes for a productive cluster
 					* docker registry
 					* general knowledge about docker
@@ -107,7 +116,11 @@
 					* At least one manager in the swarm, exactly one manger is leader
 					* Raft Consensus Algorithm is used for consistency of cluster state
 					* Traffic between nodes is TLS encrypted
-				</textarea>
+					</textarea>
+                </section>
+
+                <section>
+                    <img src="https://docs.docker.com/engine/swarm/images/swarm-diagram.png" />
                 </section>
 
                 <section data-markdown>
@@ -122,6 +135,10 @@
 					  * global: On each node exactly one container is started
 					  * replicated: Container is started specified number of times (can be scaled later)
 				</textarea>
+                </section>
+
+                <section>
+                    <img src="https://docs.docker.com/engine/swarm/images/replicated-vs-global.png" />
                 </section>
 
                 <section data-markdown>
@@ -147,6 +164,10 @@
 					</textarea>
                 </section>
 
+                <section>
+                    <img src="https://docs.docker.com/engine/swarm/images/services-diagram.png" />
+                </section>
+
                 <section data-markdown>
                     <textarea data-template>
 					## Stack
@@ -164,7 +185,7 @@
 
                 <section data-markdown>
                     <textarea data-template>
-						## Compose file example
+						### Compose file example
 						
 						```yaml
 						version: '3.5'
@@ -225,13 +246,16 @@
 					</textarea>
                 </section>
 
-				<section data-markdown>
+                <section data-markdown>
                     <textarea data-template>
 					## Port publishing / Load balancing
 					* Service can publish ports (TCP / UDP)
 					* Traffic to that port is load-balanced to replicas (VIP)
-					* https://docs.docker.com/engine/swarm/images/ingress-routing-mesh.png
 					</textarea>
+                </section>
+
+                <section>
+                    <img src="https://docs.docker.com/engine/swarm/images/ingress-routing-mesh.png" />
                 </section>
 
                 <section data-markdown>
@@ -247,13 +271,17 @@
 					* Endpoint mode configurable: DNS_RR or VIP
 					</textarea>
                 </section>
+
+                <section>
+                    <img src="https://success.docker.com/api/images/.%2Frefarch%2Fnetworking%2Fimages%2FDNS.png" />
+                </section>
             </section>
 
             <section data-markdown>
                 <textarea data-template>
 				## More features
 				* Secrets and Configs
-				  * Similar to env var, but larger (<= 500 kB)
+				  * Similar to env var, but larger (max. 500 kB)
 				  * can be definied in the compose file (or via CLI)
 				  * mounted as file in docker container
 				  * secrets are encrypted on rest - unencrypted in RAM disk
@@ -295,7 +323,7 @@
 				  * workarounds: 
 					* network storage (NFS)
 					* host pinning by using placement constraints
-				* stability / bugs in docker engine
+				* stability / bugs in docker engine &#129326;
 			</textarea>
             </section>
 
@@ -362,6 +390,7 @@
 
             // Transition style
             transition: 'convex', // none/fade/slide/convex/concave/zoom
+            backgroundTransition: 'zoom',
 
             dependencies: [
                 // Cross-browser shim that fully implements classList - https://github.com/eligrey/classList.js/
