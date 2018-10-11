@@ -1,0 +1,26 @@
+---
+version: '3.5'
+
+networks:
+  proxy:
+    external: true
+    name: net_proxy # the external name
+
+services:
+  tiles:
+    image: nginx:latest
+    deploy:
+      mode: replicated
+      replicas: 3
+      endpoint_mode: vip
+      resources:
+        limits:
+          cpus: "1"
+          memory: 200M
+      labels:
+        - "traefik.port=80"
+        - "traefik.docker.network=proxy"
+        - "traefik.backend.loadbalancer.swarm=false"
+        - "traefik.frontend.rule=Host:web.local"
+    networks:
+      - proxy
